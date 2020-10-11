@@ -7,7 +7,9 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.ar.core.ArCoreApk;
@@ -46,6 +48,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -59,6 +62,8 @@ public class MainActivity extends AppCompatActivity{
     private  boolean isAdded = false;
     float[] colorCorrection = new float[4];
 
+    Button switchBtm;
+
 
     @SuppressLint("WrongViewCast")
     @Override
@@ -69,8 +74,31 @@ public class MainActivity extends AppCompatActivity{
         setContentView(R.layout.activity_main);
 
         arFragment = (FaceARFragment) getSupportFragmentManager().findFragmentById(R.id.ar_fragment);
+        loadMaskModel(R.raw.mask, new Vector3(0f, -0.105f, 0.02f), new Vector3(0.9f, 0.9f, 0.9f));
+
+
+        switchBtm = findViewById(R.id.switchBtm);
+
+        switchBtm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                loadMaskModel(R.raw.trapper, new Vector3(0f, -0.12f, -0.05f), new Vector3(0.9f, 0.9f, 0.9f));
+                Toast.makeText(MainActivity.this, "Switch", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+
+
+
+    }
+
+
+    private void loadMaskModel(int modelResource, Vector3 localPosition, Vector3 localScale){
+
         ModelRenderable.builder()
-                .setSource(this, R.raw.mask)
+                .setSource(this, modelResource)
                 .build()
                 .thenAccept(renderable -> {
                     modelRenderable = renderable;
@@ -100,29 +128,21 @@ public class MainActivity extends AppCompatActivity{
 
                 AugmentedFaceNode arugmentedFaceNode = new AugmentedFaceNode(augmentedFace);
                 arugmentedFaceNode.setParent(arFragment.getArSceneView().getScene());
-               // arugmentedFaceNode.setFaceRegionsRenderable(null);
                 Node node = new Node();
                 modelRenderable.setRenderPriority(Renderable.RENDER_PRIORITY_FIRST);
                 node.setRenderable(modelRenderable);
                 node.setParent(arugmentedFaceNode);
-                //node.setLocalPosition(new Vector3(0f, -0.06f, -0.07f));
-                node.setLocalScale(new Vector3(0.9f, 0.9f, 0.9f));
-                node.setLocalPosition(new Vector3(0f, -0.105f, 0.02f));
+                node.setLocalScale(localScale);
+                node.setLocalPosition(localPosition);
+
                 arugmentedFaceNode.setFaceMeshTexture(texture);
                 isAdded = true;
             }
 
             LightEstimate lightEstimate = frame.getLightEstimate();
-
-            // Get the pixel intensity of AMBIENT_INTENSITY mode.
             float pixelIntensity = lightEstimate.getPixelIntensity();
-
-            // Get the pixel color correction of AMBIENT_INTENSITY mode.
             lightEstimate.getColorCorrection(colorCorrection, 0);
         });
-
-
-
     }
 
 

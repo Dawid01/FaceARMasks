@@ -60,3 +60,8 @@ sceneform.asset('sampledata/models/mask.fbx',
         'default',
         'sampledata/models/mask.sfa',
         'src/main/res/raw/mask')
+
+sceneform.asset('sampledata/models/trapper.fbx',
+        'default',
+        'sampledata/models/trapper.sfa',
+        'src/main/res/raw/trapper')
