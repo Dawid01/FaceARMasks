@@ -21,14 +21,22 @@ import android.view.PixelCopy;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.ar.core.Frame;
 import com.google.ar.core.LightEstimate;
 import com.google.ar.core.exceptions.NotYetAvailableException;
 import com.google.ar.sceneform.Node;
 import com.google.ar.sceneform.math.Vector3;
 import com.google.ar.sceneform.rendering.ModelRenderable;
+import com.mikhaellopez.circularimageview.CircularImageView;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
 import com.szczepaniak.covidmask.helpers.PermissionHelper;
 import com.szczepaniak.covidmask.helpers.FullScreenHelper;
 import com.google.ar.core.AugmentedFace;
@@ -36,6 +44,7 @@ import com.google.ar.sceneform.rendering.Renderable;
 import com.google.ar.sceneform.rendering.Texture;
 import com.google.ar.sceneform.ux.AugmentedFaceNode;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -53,6 +62,8 @@ public class MainActivity extends AppCompatActivity{
     float[] colorCorrection = new float[4];
 
     private VideoButton videoButton;
+
+    private ImageView galleryButton;
 
 
 
@@ -90,6 +101,9 @@ public class MainActivity extends AppCompatActivity{
             void stopRecording() {
             }
         });
+
+        galleryButton = findViewById(R.id.gallery_button);
+        updateGalleryBtm(null);
 
     }
 
@@ -200,26 +214,75 @@ public class MainActivity extends AppCompatActivity{
     private void saveImage(Bitmap finalBitmap) {
 
         String root = Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES).toString();
-        File myDir = new File(root);
-        myDir.mkdirs();
-        String name = String.valueOf("CovidMask-" + System.currentTimeMillis() + ".jpg");
-        File file = new File(myDir, name);
-        if (file.exists()) file.delete();
-        Log.i("LOAD", root + name);
+                Environment.DIRECTORY_DCIM ).toString();
+        File myDir = new File(root + "/CovidMask");
+
         try {
-            FileOutputStream out = new FileOutputStream(file);
-            //finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-            out.flush();
-            out.close();
-            MediaStore.Images.Media.insertImage(getContentResolver(),file.getAbsolutePath(),file.getName(),file.getName());
-            Toast.makeText(MainActivity.this,
-                    "Take Photo", Toast.LENGTH_SHORT).show();
+            myDir.mkdirs();
+            String name = String.valueOf("CovidMask-" + System.currentTimeMillis() + ".png");
+            File file = new File(myDir, name);
+            if(!file.exists()) {
+                file.createNewFile();
+            }
+
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            finalBitmap.compress(Bitmap.CompressFormat.PNG, 0 , bos);
+            //finalBitmap.compress(Bitmap.CompressFormat.JPEG, 1 , bos);
+
+            byte[] bitmapdata = bos.toByteArray();
+
+            FileOutputStream fos = new FileOutputStream(file);
+            fos.write(bitmapdata);
+            fos.flush();
+            fos.close();
+            updateGalleryBtm(file);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    private void updateGalleryBtm(File photo){
+
+        clearGlideDiskCache();
+        String path =Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_DCIM ).toString() +"/CovidMask";
+        File directory = new File(path);
+        File[] files = directory.listFiles();
+        if(files != null) {
+            if(files.length !=0) {
+                if(photo == null) {
+                    Glide.with(MainActivity.this).load(files[files.length - 1]).centerCrop().circleCrop().apply(RequestOptions.skipMemoryCacheOf(true))
+                            .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE)).into(galleryButton);
+                }else{
+                    Glide.with(MainActivity.this).load(photo).skipMemoryCache(true).centerCrop().circleCrop().apply(RequestOptions.skipMemoryCacheOf(true))
+                            .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE)).into(galleryButton);
+                  //  Picasso.get().load(photo).memoryPolicy(MemoryPolicy.NO_CACHE).centerCrop().transform(new CircleTransform()).into(galleryButton);
+
+                }
+
+            }else {
+            Glide.with(MainActivity.this).load(R.drawable.gallery_bg).skipMemoryCache(true).centerCrop().circleCrop().apply(RequestOptions.skipMemoryCacheOf(true))
+                    .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE)).into(galleryButton);
+        }
+
+        }else {
+            Glide.with(MainActivity.this).load(R.drawable.gallery_bg).skipMemoryCache(true).centerCrop().circleCrop().apply(RequestOptions.skipMemoryCacheOf(true))
+                    .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE)).into(galleryButton);
+
+        }
+    }
+
+    void clearGlideDiskCache()
+    {
+        new Thread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                Glide.get(getApplicationContext()).clearDiskCache();
+            }
+        }).start();
+    }
 
 }
