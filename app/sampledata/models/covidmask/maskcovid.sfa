@@ -1,0 +1,76 @@
+{
+  animations: [
+    {
+      path: 'sampledata/models/covidmask/maskcovid.fbx',
+    },
+  ],
+  materials: [
+    {
+      name: 'Mask',
+      parameters: [
+        {
+          baseColor: [
+            1,
+            1,
+            1,
+            1,
+          ],
+        },
+        {
+          baseColorMap: 'albedo',
+        },
+        {
+          normalMap: 'normal_dx',
+        },
+        {
+          interpolatedColor: null,
+        },
+        {
+          metallic: 0,
+        },
+        {
+          metallicMap: null,
+        },
+        {
+          roughness: 1,
+        },
+        {
+          roughnessMap: null,
+        },
+        {
+          opacity: null,
+        },
+      ],
+      source: 'build/sceneform_sdk/default_materials/fbx_material.sfm',
+    },
+  ],
+  model: {
+    attributes: [
+      'Position',
+      'TexCoord',
+      'Orientation',
+      'BoneIndices',
+      'BoneWeights',
+    ],
+    collision: {},
+    file: 'sampledata/models/covidmask/maskcovid.fbx',
+    name: 'maskcovid',
+    recenter: 'root',
+  },
+  samplers: [
+    {
+      file: 'sampledata/models/covidmask/albedo.png',
+      name: 'albedo',
+      pipeline_name: 'albedo.png',
+    },
+    {
+      file: 'sampledata/models/covidmask/normal_dx.png',
+      name: 'normal_dx',
+      params: {
+        usage_type: 'Normal',
+      },
+      pipeline_name: 'normal_dx.png',
+    },
+  ],
+  version: '0.54:2',
+}

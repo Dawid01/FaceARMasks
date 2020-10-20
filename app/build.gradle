@@ -15,6 +15,8 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -45,23 +47,7 @@ dependencies {
     implementation 'com.google.ar:core:1.20.0'
     implementation 'com.google.ar.sceneform.ux:sceneform-ux:1.17.1'
     implementation 'com.google.ar.sceneform:core:1.17.1'
+    implementation 'com.mikhaellopez:circularprogressbar:1.0.0'
+
 }
 
-
-
-sceneform.asset('sampledata/models/demogorgon.fbx',
-        'default',
-        'sampledata/models/demogorgon.sfa',
-        'src/main/res/raw/demogorgon')
-
-
-
-sceneform.asset('sampledata/models/mask.fbx',
-        'default',
-        'sampledata/models/mask.sfa',
-        'src/main/res/raw/mask')
-
-sceneform.asset('sampledata/models/trapper.fbx',
-        'default',
-        'sampledata/models/trapper.sfa',
-        'src/main/res/raw/trapper')

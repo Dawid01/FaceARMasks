@@ -8,22 +8,23 @@
 
     <fragment
         android:id="@+id/ar_fragment"
-        android:name="com.szczepaniak.hairapp.FaceARFragment"
+        android:name="com.szczepaniak.covidmask.FaceARFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:layout_editor_absoluteX="16dp"
         tools:layout_editor_absoluteY="-39dp" />
 
-    <Button
-        android:id="@+id/switchBtm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:text="switch"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/ar_fragment"
-        app:layout_constraintVertical_bias="1.0" />
+    <com.szczepaniak.covidmask.VideoButton
+        android:id="@+id/video_button"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginBottom="25dp"
+        app:layout_constraintBottom_toBottomOf="@+id/ar_fragment"
+        app:layout_constraintEnd_toEndOf="@+id/ar_fragment"
+        app:layout_constraintStart_toStartOf="@+id/ar_fragment"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        tools:ignore="MissingConstraints" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
