@@ -23,6 +23,7 @@ public class VideoButton extends FrameLayout {
 
     private ImageView button;
     private CircularProgressBar progressBar;
+    private boolean isRecording = false;
 
     public VideButtonListner getVideButtonListner() {
         return videButtonListner;
@@ -89,6 +90,7 @@ public class VideoButton extends FrameLayout {
                 button.setScaleY(0.75f);
                 progressBar.setProgressBarWidth(wp * 1.2f);
                 progressBar.setBackgroundProgressBarWidth(wb * 1.2f);
+                isRecording = true;
                 countDownTimer= new CountDownTimer(10000, 1) {
 
                     public void onTick(long millisUntilFinished) {
@@ -106,7 +108,10 @@ public class VideoButton extends FrameLayout {
                       progressBar.setBackgroundProgressBarWidth(wb);
                       button.setScaleX(1f);
                       button.setScaleY(1f);
-                      videButtonListner.stopRecording();
+                      if(isRecording) {
+                          videButtonListner.stopRecording();
+                      }
+                      isRecording = false;
                     }
                 }.start();
 
@@ -115,8 +120,11 @@ public class VideoButton extends FrameLayout {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
                         if(event.getAction() == MotionEvent.ACTION_UP){
-                            countDownTimer.onFinish();
-                            countDownTimer.cancel();
+                            if(isRecording){
+                                countDownTimer.onFinish();
+                                countDownTimer.cancel();
+                            }
+
                         }
                         return false;
                     }

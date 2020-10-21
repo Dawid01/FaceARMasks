@@ -8,13 +8,17 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.hardware.display.DisplayManager;
 import android.media.Image;
+import android.media.MediaRecorder;
 import android.media.MediaScannerConnection;
+import android.media.projection.MediaProjection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.Vibrator;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.PixelCopy;
@@ -65,6 +69,10 @@ public class MainActivity extends AppCompatActivity{
 
     private ImageView galleryButton;
 
+    private Vibrator vibrator;
+
+    private MediaRecorder mRecorder;
+    private MediaProjection mMediaProjection;
 
 
     @SuppressLint("WrongViewCast")
@@ -83,6 +91,8 @@ public class MainActivity extends AppCompatActivity{
         covidMask.setLocalScale(new Vector3(1f, 1f, 1f));
         loadMaskModel(covidMask);
 
+        vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+
         videoButton = findViewById(R.id.video_button);
 
         videoButton.setVideButtonListner(new VideButtonListner() {
@@ -90,15 +100,18 @@ public class MainActivity extends AppCompatActivity{
             void takePhoto() {
 
                 takePhotoAR();
+                vibrator.vibrate(25);
             }
 
             @Override
             void startRecording() {
+                vibrator.vibrate(25);
 
             }
 
             @Override
             void stopRecording() {
+                vibrator.vibrate(25);
             }
         });
 
@@ -284,5 +297,6 @@ public class MainActivity extends AppCompatActivity{
             }
         }).start();
     }
+    
 
 }
