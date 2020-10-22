@@ -36,7 +36,9 @@ import com.google.ar.sceneform.ux.AugmentedFaceNode;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 
 public class CameraPage extends Fragment {
 
@@ -197,14 +199,12 @@ public class CameraPage extends Fragment {
     private void updateGalleryBtm(File photo){
 
         clearGlideDiskCache();
-        String path =Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_DCIM ).toString() +"/CovidMask";
-        File directory = new File(path);
-        File[] files = directory.listFiles();
+
+        File[] files = getGalleryFiles();
         if(files != null) {
             if(files.length !=0) {
                 if(photo == null) {
-                    Glide.with(m).load(files[files.length - 1]).centerCrop().circleCrop().apply(RequestOptions.skipMemoryCacheOf(true))
+                    Glide.with(m).load(files[0]).centerCrop().circleCrop().apply(RequestOptions.skipMemoryCacheOf(true))
                             .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE)).into(galleryButton);
                 }else{
                     Glide.with(m).load(photo).skipMemoryCache(true).centerCrop().circleCrop().apply(RequestOptions.skipMemoryCacheOf(true))
@@ -235,5 +235,29 @@ public class CameraPage extends Fragment {
                 Glide.get(m).clearDiskCache();
             }
         }).start();
+    }
+
+    private File[] getGalleryFiles(){
+
+        String path = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_DCIM ).toString() +"/CovidMask";
+        File directory = new File(path);
+        File[] files = directory.listFiles();
+
+        Arrays.sort(files, new Comparator() {
+            public int compare(Object o1, Object o2) {
+
+                if (((File)o1).lastModified() > ((File)o2).lastModified()) {
+                    return -1;
+                } else if (((File)o1).lastModified() < ((File)o2).lastModified()) {
+                    return +1;
+                } else {
+                    return 0;
+                }
+            }
+
+        });
+
+        return  files;
     }
 }

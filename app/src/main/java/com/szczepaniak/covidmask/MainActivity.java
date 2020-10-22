@@ -5,6 +5,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.view.View;
 import android.view.WindowManager;
 import com.szczepaniak.covidmask.helpers.PermissionHelper;
 import com.szczepaniak.covidmask.helpers.FullScreenHelper;
@@ -24,8 +25,18 @@ public class MainActivity extends AppCompatActivity{
 
         viewPager = findViewById(R.id.pager);
         viewPager.setOffscreenPageLimit(3);
-        viewPager.setAdapter(new PageAdapter(this));
+        viewPager.setSaveEnabled(true);
         viewPager.setCurrentItem(1);
+        viewPager.setAdapter(new PageAdapter(this));
+
+        viewPager.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+
+            }
+        });
+
+        //viewPager.setCurrentItem(1);
 
     }
 
