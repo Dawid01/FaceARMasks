@@ -1,10 +1,12 @@
 package com.szczepaniak.covidmask;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import com.szczepaniak.covidmask.helpers.PermissionHelper;
@@ -24,17 +26,33 @@ public class MainActivity extends AppCompatActivity{
         setContentView(R.layout.activity_main);
 
         viewPager = findViewById(R.id.pager);
+        //viewPager.setOffscreenPageLimit(2);
         viewPager.setOffscreenPageLimit(3);
-        viewPager.setSaveEnabled(true);
+        PageAdapter pagerAdapter = new PageAdapter(this);
+        viewPager.setAdapter(pagerAdapter);
         viewPager.setCurrentItem(1);
-        viewPager.setAdapter(new PageAdapter(this));
 
-        viewPager.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+
+
+        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
 
             }
         });
+       // pagerAdapter.notifyDataSetChanged();
+
+
 
         //viewPager.setCurrentItem(1);
 

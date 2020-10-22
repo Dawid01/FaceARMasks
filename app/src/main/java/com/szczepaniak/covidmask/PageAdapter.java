@@ -51,7 +51,7 @@ public class PageAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        return ViewPage.values().length;
+        return 3;
     }
 
     @Override
