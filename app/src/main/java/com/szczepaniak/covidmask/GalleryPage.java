@@ -16,6 +16,7 @@ public class GalleryPage extends Fragment {
 
     private MainActivity m;
     private RecyclerView galleryView;
+    private Singleton singleton;
 
     public GalleryPage(View pageView, MainActivity m) {
         this.m = m;
@@ -28,6 +29,9 @@ public class GalleryPage extends Fragment {
         File[] files = getGalleryFiles();
         GalleryAdapter galleryAdapter = new GalleryAdapter(files, m, galleryView);
         galleryView.setAdapter(galleryAdapter);
+
+        singleton = Singleton.getInstance();
+        singleton.setGalleryAdapter(galleryAdapter);
 
     }
 

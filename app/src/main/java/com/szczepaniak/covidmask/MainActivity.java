@@ -12,10 +12,14 @@ import android.view.WindowManager;
 import com.szczepaniak.covidmask.helpers.PermissionHelper;
 import com.szczepaniak.covidmask.helpers.FullScreenHelper;
 
+import java.io.File;
+import java.util.Arrays;
+
 public class MainActivity extends AppCompatActivity{
 
 
     private ViewPager viewPager;
+    private Singleton singleton;
 
     @SuppressLint("WrongViewCast")
     @Override
@@ -26,11 +30,15 @@ public class MainActivity extends AppCompatActivity{
         setContentView(R.layout.activity_main);
 
         viewPager = findViewById(R.id.pager);
-        //viewPager.setOffscreenPageLimit(2);
-        viewPager.setOffscreenPageLimit(3);
+        viewPager.setOffscreenPageLimit(2);
+       // viewPager.setOffscreenPageLimit(3);
+        viewPager.setPageMargin(25);
+//        viewPager.setPageTransformer(true, new DepthPageTransformer(), 2);
         PageAdapter pagerAdapter = new PageAdapter(this);
         viewPager.setAdapter(pagerAdapter);
         viewPager.setCurrentItem(1);
+        singleton = Singleton.getInstance();
+        singleton.setViewPager(viewPager);
 
 
 
@@ -43,6 +51,16 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onPageSelected(int position) {
 
+                if (position == 0) {
+
+                    File[] files = singleton.getGalleryFiles();
+                    GalleryAdapter galleryAdapter = singleton.getGalleryAdapter();
+                    if(!Arrays.equals(files, galleryAdapter.getFiles())) {
+                        galleryAdapter.setFiles(files);
+                        galleryAdapter.notifyDataSetChanged();
+
+                    }
+                }
             }
 
             @Override

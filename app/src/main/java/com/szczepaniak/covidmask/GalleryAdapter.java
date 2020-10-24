@@ -22,6 +22,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
     private Context context;
     private RecyclerView recyclerView;
 
+
     public GalleryAdapter(File[] files, Context context, RecyclerView recyclerView) {
         this.files = files;
         this.context = context;
@@ -54,6 +55,11 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
         return position;
     }
 
+    public void updateAdapter(File[] files) {
+        this.files = files;
+        this.notifyDataSetChanged();
+    }
+
     public static class GalleryVieHolder extends RecyclerView.ViewHolder {
 
         ImageView image;
@@ -67,5 +73,13 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
             layoutParams.height = w;
             image.setLayoutParams(layoutParams);
         }
+    }
+
+    public File[] getFiles() {
+        return files;
+    }
+
+    public void setFiles(File[] files) {
+        this.files = files;
     }
 }

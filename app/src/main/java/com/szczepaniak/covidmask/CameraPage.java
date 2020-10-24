@@ -19,6 +19,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -51,6 +52,7 @@ public class CameraPage extends Fragment {
     private VideoButton videoButton;
     private ImageView galleryButton;
     private MainActivity m;
+    private Singleton singleton;
 
 
     public CameraPage(View pageView, MainActivity mainActivity) {
@@ -89,6 +91,16 @@ public class CameraPage extends Fragment {
 
         galleryButton = pageView.findViewById(R.id.gallery_button);
         updateGalleryBtm(null);
+        singleton = Singleton.getInstance();
+        ViewPager viewPager = singleton.getViewPager();
+
+        galleryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                viewPager.setCurrentItem(0, true);
+            }
+        });
 
     }
 
@@ -113,6 +125,10 @@ public class CameraPage extends Fragment {
             }
             handlerThread.quitSafely();
         }, new Handler(handlerThread.getLooper()));
+
+        Glide.with(m).load(bitmap).skipMemoryCache(true).centerCrop().circleCrop().apply(RequestOptions.skipMemoryCacheOf(true))
+                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE)).into(galleryButton);
+
     }
 
     private void loadMaskModel(MaskModel maskModel){
@@ -207,8 +223,8 @@ public class CameraPage extends Fragment {
                     Glide.with(m).load(files[0]).centerCrop().circleCrop().apply(RequestOptions.skipMemoryCacheOf(true))
                             .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE)).into(galleryButton);
                 }else{
-                    Glide.with(m).load(photo).skipMemoryCache(true).centerCrop().circleCrop().apply(RequestOptions.skipMemoryCacheOf(true))
-                            .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE)).into(galleryButton);
+//                    Glide.with(m).load(photo).skipMemoryCache(true).centerCrop().circleCrop().apply(RequestOptions.skipMemoryCacheOf(true))
+//                            .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE)).into(galleryButton);
                     //  Picasso.get().load(photo).memoryPolicy(MemoryPolicy.NO_CACHE).centerCrop().transform(new CircleTransform()).into(galleryButton);
 
                 }

@@ -51,7 +51,14 @@ public class FaceARFragment extends ArFragment {
         return frameLayout;
     }
 
-//    @Override
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+    }
+
+
+    //    @Override
 //    public void onUpdate(FrameTime frameTime) {
 //        super.onUpdate(frameTime);
 //        Frame frame = null;

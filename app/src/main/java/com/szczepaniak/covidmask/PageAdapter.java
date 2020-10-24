@@ -26,6 +26,7 @@ public class PageAdapter extends PagerAdapter {
         LayoutInflater inflater = LayoutInflater.from(m);
         ViewGroup layout = (ViewGroup) inflater.inflate(page.getLayoutResId(), collection, false);
         collection.addView(layout);
+        layout.setTag(position);
 
         switch (page.getLayoutResId()){
 
@@ -64,5 +65,7 @@ public class PageAdapter extends PagerAdapter {
         ViewPage customPagerEnum = ViewPage.values()[position];
         return m.getString(customPagerEnum.getTitleResId());
     }
+
+
 
 }
